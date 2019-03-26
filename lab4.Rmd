@@ -9,22 +9,53 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+```{r}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+library(readxl)
+library(dplyr) 
+library(forcats)
+library(ggplot2)
+library(tidyr)
+library(stringr)
+library(reshape2)
+defense <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Defensive')
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+offense  <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Offensive')
 
-```{r cars}
-summary(cars) 
+bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
+
+
 ```
 
-## Including Plots
+```{r}
+#str(defense)
 
-You can also embed plots, for example:
+defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric)) %>% str
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+#str(offense)
+
+offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Rec")), list(as.numeric)) %>% mutate_at(vars(starts_with("Rush")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric)) %>% str
+
+```
+
+
+
+```{r}
+
+bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_replace_all(Height, "-", "")) %>% mutate(Height = as.numeric(Height)) %>% str
+
+
+```
+
+
+
+
+```{r}
+#defClean %>% gather(key = Statistic, value = Tackles_Solo, 3:6)
+
+
+```
