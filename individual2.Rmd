@@ -1,0 +1,59 @@
+---
+title: "individual2.Rmd"
+author: "Elaine"
+date: "3/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
+str(defense)
+
+offense <- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
+str(offense)
+
+biography <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
+str(biography)
+```
+
+?mutate_at
+```{r}
+defClean <- defense %>%
+  mutate(Name = as.factor(Name),
+         Opponent_Opponent = as.factor(Opponent_Opponent)) %>%
+  mutate_if(is.character,as.numeric)
+str(defClean)
+print(str(defClean))
+
+offClean <- offense %>%
+  mutate(Name = as.factor(Name),
+         Opponent_Opponent = as.factor(Opponent_Opponent)) %>%
+  mutate_if(is.character,as.numeric, na.rm=TRUE)
+str(offClean)
+print(str(offClean))
+
+
+bioClean <- biography %>%
+  mutate(Name = as.factor(Name),
+         Weight = as.numeric(Weight)) %>%
+  separate(Height, c('feet', 'inches'), "-", convert=TRUE) %>%
+  mutate(Height = (12*feet + inches)*2.54)
+str(bioClean)
+print(str(bioClean))
+```
+
+```{r}
+#Part two: Tidying (1)
+defClean <- defClean %>% gather(key=Statistic, value=Count, 3:11)
+defClean
+
+ggplot(defClean, aes(x=Count, fill=Statistic)) + geom_histogram(binwidth=0.5) +
+  facet_wrap(~Statistic)
+
+```
