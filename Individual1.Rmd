@@ -1,0 +1,62 @@
+---
+title: "Lab4"
+author: "Andrew Maloney"
+date: "3/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+library(readxl)
+library(dplyr) 
+library(forcats)
+library(ggplot2)
+library(tidyr)
+library(stringr)
+library(reshape2)
+defense <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Defensive')
+
+offense  <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Offensive')
+
+bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
+
+
+```
+
+```{r}
+#str(defense)
+
+defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
+
+
+```
+
+```{r}
+#str(offense)
+
+offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Rec")), list(as.numeric)) %>% mutate_at(vars(starts_with("Rush")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric)) %>% str
+
+```
+
+
+
+```{r}
+
+bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_replace_all(Height, "-", "")) %>% mutate(Height = as.numeric(Height)) %>% str
+
+
+```
+
+
+
+
+```{r}
+
+defClean <- defClean %>% gather(key = Statistic, value = Count, 3:11) %>% str
+
+```
