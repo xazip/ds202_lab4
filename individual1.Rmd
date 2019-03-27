@@ -31,7 +31,9 @@ bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
 ```{r}
 #str(defense)
 
-defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric)) %>% str
+defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
+
+str(defClean)
 
 
 ```
@@ -39,7 +41,9 @@ defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(O
 ```{r}
 #str(offense)
 
-offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Rec")), list(as.numeric)) %>% mutate_at(vars(starts_with("Rush")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric)) %>% str
+offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Rec")), list(as.numeric)) %>% mutate_at(vars(starts_with("Rush")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
+
+str(offClean)
 
 ```
 
@@ -47,9 +51,9 @@ offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(O
 
 ```{r}
 
-bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_replace_all(Height, "-", "")) %>% mutate(Height = as.numeric(Height)) %>% str
+bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_replace_all(Height, "-", "")) %>% mutate(Height = as.numeric(Height))
 
-
+str(bioClean)
 ```
 
 
@@ -57,7 +61,32 @@ bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_
 
 ```{r}
 
-#defClean_Tidy <- defClean %>% gather(key = Statistic, value = Count, 3:11) %>% str
+defClean_Tidy <- defClean %>% gather(key = Statistic, value = Count, 3:11)
+print(defClean_Tidy)
+```
+
+```{r}
+defClean_Tidy %>% ggplot(aes(x = Count, fill = Statistic))+ 
+  geom_histogram(binwidth = 0.7) + facet_wrap(~Statistic)+
+  ggtitle("Defense Statistic histogram") + xlab("xlabel") + ylab("ylabel")
+
+```
+
+```{r}
+Teams <- c("West Virginia", "Kansas State")
+defClean_Tidy_Teams <- defClean_Tidy %>% filter(Opponent_Opponent %in% Teams) %>% spread(key = Opponent_Opponent, value = Count) %>% filter(Statistic == "Tackles_Solo")
+
+print(defClean_Tidy_Teams)
+
+defClean_Tidy_Teams %>% ggplot(aes(x = `Kansas State`, y = `West Virginia`))+ 
+  geom_point(na.rm = TRUE) 
+
+
+#defClean %>% select(Name, Opponent_Opponent, Tackles_Solo) %>% spread(Opponent_Opponent, Tackles_Solo) %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`)) + geom_point()
+```
+
+```{r}
+#So Close
 
 ```
 
