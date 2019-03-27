@@ -31,7 +31,7 @@ bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
 ```{r}
 #str(defense)
 
-defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
+defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric)) %>% str
 
 
 ```
@@ -57,6 +57,7 @@ bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_
 
 ```{r}
 
-defClean <- defClean %>% gather(key = Statistic, value = Count, 3:11) %>% str
+#defClean_Tidy <- defClean %>% gather(key = Statistic, value = Count, 3:11) %>% str
 
 ```
+
