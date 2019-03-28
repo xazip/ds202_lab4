@@ -73,7 +73,7 @@ print(defClean_Tidy)
 ```{r}
 defClean_Tidy %>% ggplot(aes(x = Count, fill = Statistic))+ 
   geom_histogram(binwidth = 0.7) + facet_wrap(~Statistic)+
-  ggtitle("Defense Statistic histogram") + xlab("xlabel") + ylab("ylabel")
+  ggtitle("Defense Statistic histogram") + xlab("Defense Statistic")
 
 ```
 
@@ -87,7 +87,8 @@ defClean_Tidy_Teams <- defClean_Tidy %>% filter(Opponent_Opponent %in% Teams) %>
 print(defClean_Tidy_Teams)
 
 defClean_Tidy_Teams %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`))+ 
-  geom_point(na.rm = TRUE) + geom_jitter(na.rm = TRUE)
+  geom_point(na.rm = TRUE) + geom_jitter(na.rm = TRUE)+ 
+  ggtitle("Which Game did Iowa State play better Defense?") + xlab("Solo Tackles againt West Virginia") +ylab("Solo Tackles againt Kansas State")
 
 #defClean %>% select(Name, Opponent_Opponent, Tackles_Solo) %>% spread(Opponent_Opponent, Tackles_Solo) %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`)) + geom_point()
 ```
@@ -116,7 +117,9 @@ print(Players_State)
 ```{r}
 Joined_Offense_with_Biography <- inner_join(offClean, bioClean_Tidy, by = "Name")
 Players_Origin <- Joined_Offense_with_Biography %>% distinct(Name, City, State, Highschool)
+print(Joined_Offense_with_Biography)
 print(Players_Origin)
+
 
 ```
 
@@ -130,8 +133,16 @@ Joined_Offense_with_Biography %>% ggplot(aes(x = Weight, y = Receiving_YDS, colo
 ###### There does not seem to be a relationship between the weight of a player and the amount of receiving yards.  It is more likely that there is a relationship between the position the player plays and the amount of receiving yards.
 
 #### 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
+
+New Question: Is there anything we can conclude from the Height of a player and the positiions of a player on Iowa State Football Team? 
 ```{r}
+Joined_Defense_with_Biography <- inner_join(defClean, bioClean_Tidy, by = "Name")
 
+Complete_Join_Biography <- full_join(Joined_Defense_with_Biography, Joined_Offense_with_Biography)
+print(Complete_Join_Biography)
 
-
+Complete_Join_Biography %>% ggplot(aes(x = Position, y = Height_in_Centimeters, fill = Position))+
+  geom_boxplot(na.rm = TRUE)+
+  ggtitle("Height Box Plot") + xlab("Position") +ylab("Height in Centimeters") + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+  
 ```
