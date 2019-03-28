@@ -139,13 +139,14 @@ New Question: Is there anything we can conclude from the Height and Weight of a 
 Joined_Defense_with_Biography <- inner_join(defClean, bioClean_Tidy, by = "Name")
 
 Complete_Join_Biography <- full_join(Joined_Defense_with_Biography, Joined_Offense_with_Biography)
-print(Complete_Join_Biography)
+Complete_Join_Biography_2 <- Complete_Join_Biography %>% distinct(Name, Position, Weight, Height_in_Centimeters)
+print(Complete_Join_Biography_2)
 
-Complete_Join_Biography %>% ggplot(aes(x = Position, y = Height_in_Centimeters, fill = Position))+
+Complete_Join_Biography_2 %>% ggplot(aes(x = Position, y = Height_in_Centimeters, fill = Position))+
   geom_boxplot(na.rm = TRUE)+
   ggtitle("Height Box Plot") + xlab("Position") +ylab("Height in Centimeters") + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
   
-Complete_Join_Biography %>% ggplot(aes(x = Position, y = Weight, fill = Position))+
+Complete_Join_Biography_2 %>% ggplot(aes(x = Position, y = Weight, fill = Position))+
   geom_boxplot(na.rm = TRUE)+
   ggtitle("Weight Box Plot") + xlab("Position") +ylab("Weight in Pounds") + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
