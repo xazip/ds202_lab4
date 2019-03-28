@@ -34,7 +34,7 @@ bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
 defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
 
 str(defClean)
-
+print(defClean)
 
 ```
 
@@ -44,20 +44,16 @@ str(defClean)
 offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Rec")), list(as.numeric)) %>% mutate_at(vars(starts_with("Rush")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
 
 str(offClean)
-
+print(offClean)
 ```
-
-
 
 ```{r}
 
-bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% mutate(Height = str_replace_all(Height, "-", "")) %>% mutate(Height = as.numeric(Height))
+bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% separate(Height, c("Feet", "Inches"), "-", convert = TRUE) %>% mutate(Height = (Feet*12) + Inches)
 
 str(bioClean)
+print(bioClean)
 ```
-
-
-
 
 ```{r}
 
@@ -78,7 +74,7 @@ defClean_Tidy_Teams <- defClean_Tidy %>% filter(Opponent_Opponent %in% Teams) %>
 
 print(defClean_Tidy_Teams)
 
-defClean_Tidy_Teams %>% ggplot(aes(x = `Kansas State`, y = `West Virginia`))+ 
+defClean_Tidy_Teams %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`))+ 
   geom_point(na.rm = TRUE) 
 
 
@@ -86,7 +82,27 @@ defClean_Tidy_Teams %>% ggplot(aes(x = `Kansas State`, y = `West Virginia`))+
 ```
 
 ```{r}
-#So Close
+#str(bioClean)
+
+bioClean_Tidy <- bioClean %>% separate(Hometown, c("City", "State"), ",", convert = TRUE )
+print(bioClean_Tidy)
+
+Players_State <- table(bioClean_Tidy$State)
+print(Players_State)
 
 ```
+
+```{r}
+Joined_Offense_with_Biography <- inner_join(offClean, bioClean_Tidy, by = "Name")
+Players_Origin <- Joined_Offense_with_Biography %>% distinct(Name, City, State, Highschool)
+print(Players_Origin)
+
+Joined_Offense_with_Biography %>% ggplot(aes(x = Weight, y = Rushing_YDS, color = Name))+
+  geom_point(na.rm = TRUE) + geom_jitter(na.rm = TRUE)
+
+
+```
+
+
+
 
