@@ -1,0 +1,137 @@
+---
+title: "Lab 4 Team Collaboration"
+author: "Andrew Maloney & Elaine Ob"
+date: "3/28/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading Data
+```{r}
+
+library(readxl)
+library(dplyr) 
+library(forcats)
+library(ggplot2)
+library(tidyr)
+library(stringr)
+library(reshape2)
+defense <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Defensive')
+
+offense  <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Offensive')
+
+bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
+
+
+```
+
+## Part One: Cleaning data
+
+#### 1. The player names and opponent names are factors.
+#### 2. All offensive and defensive statistics are numerical. The Weight column in biogrpahy is also numeric.
+#### 3. Bonus: Change the Height column in biogrpahy into numeric.
+```{r}
+#str(defense)
+
+defClean <- defense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Tack")), list(as.numeric)) %>% mutate_at(vars(starts_with("Turn")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
+
+str(defClean)
+print(defClean)
+
+```
+
+```{r}
+#str(offense)
+
+offClean <- offense %>% mutate(Name = factor(Name), Opponent_Opponent = factor(Opponent_Opponent)) %>% mutate_at(vars(starts_with("Rec")), list(as.numeric)) %>% mutate_at(vars(starts_with("Rush")), list(as.numeric)) %>% mutate_at(vars(starts_with("Pass")), list(as.numeric))
+
+str(offClean)
+print(offClean)
+```
+
+```{r}
+
+bioClean <- bio %>% mutate(Weight = as.numeric(Weight)) %>% separate(Height, c("Feet", "Inches"), "-", convert = TRUE) %>% mutate(Height_in_Centimeters = ((Feet*12) + Inches)*2.54)
+
+str(bioClean)
+print(bioClean)
+```
+
+
+## Part Two: Tidying(1)
+#### 1. Reformat the defClean data frame into a tidy format using gather. The type of statistic (Tackles_Solo, Tackles_ASST, etc) is added as a new key column named Statistic.
+```{r}
+
+defClean_Tidy <- defClean %>% gather(key = Statistic, value = Count, 3:11)
+print(defClean_Tidy)
+```
+
+#### 2. Create a histogram for each defensive statistic. Use facet_wrap to draw all histograms in a single plot. What defensive skills are rare?
+```{r}
+defClean_Tidy %>% ggplot(aes(x = Count, fill = Statistic))+ 
+  geom_histogram(binwidth = 0.7) + facet_wrap(~Statistic)+
+  ggtitle("Defense Statistic histogram") + xlab("xlabel") + ylab("ylabel")
+
+```
+
+###### Looking at the 9 histograms we can see that the Turnovers are a rare defensive skill.  This makes sense to anyone who has watched a football game.  Turnover plays do not happen often.
+
+#### 3. Did ISU have better defense against West Virginia or Kansas State?
+```{r}
+Teams <- c("West Virginia", "Kansas State")
+defClean_Tidy_Teams <- defClean_Tidy %>% filter(Opponent_Opponent %in% Teams) %>% spread(key = Opponent_Opponent, value = Count) %>% filter(Statistic == "Tackles_Solo")
+
+print(defClean_Tidy_Teams)
+
+defClean_Tidy_Teams %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`))+ 
+  geom_point(na.rm = TRUE) + geom_jitter(na.rm = TRUE)
+
+#defClean %>% select(Name, Opponent_Opponent, Tackles_Solo) %>% spread(Opponent_Opponent, Tackles_Solo) %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`)) + geom_point()
+```
+
+###### Looking at the newly created data frame and scatterplot, we can see Iowa State had a significanlty better defense game against Kansas State then when playing West Virginia.  
+
+## Part Two: Tidying(2)
+#### 1. Separate the Hometown column into two columns, namely the city and the state. Print the first few rows of these two columns. 
+
+#### 2. How many players are there from each state?
+```{r}
+#str(bioClean)
+
+bioClean_Tidy <- bioClean %>% separate(Hometown, c("City", "State"), ",", convert = TRUE )
+print(bioClean_Tidy, 3)
+
+Players_State <- table(bioClean_Tidy$State)
+print(Players_State)
+
+```
+
+
+
+## Part Three: Joing Dataframes 
+#### 1. Find where do the offensive players come from by joining the offensive data and player biography data appropriately.
+```{r}
+Joined_Offense_with_Biography <- inner_join(offClean, bioClean_Tidy, by = "Name")
+Players_Origin <- Joined_Offense_with_Biography %>% distinct(Name, City, State, Highschool)
+print(Players_Origin)
+
+```
+
+#### 2. Is there a relationship between the weight of a player and the receiving yards (Receiving_YDS)?
+```{r}
+Joined_Offense_with_Biography %>% ggplot(aes(x = Weight, y = Receiving_YDS, color = Name))+
+  geom_point(na.rm = TRUE) + geom_jitter(na.rm = TRUE)
+
+```
+
+###### There does not seem to be a relationship between the weight of a player and the amount of receiving yards.  It is more likely that there is a relationship between the position the player plays and the amount of receiving yards.
+
+#### 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
+```{r}
+
+
+
+```
