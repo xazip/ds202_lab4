@@ -77,7 +77,7 @@ defClean_Tidy %>% ggplot(aes(x = Count, fill = Statistic))+
 
 ```
 
-###### Looking at the 9 histograms we can see that the Turnovers are a rare defensive skill.  This makes sense to anyone who has watched a football game.  Turnover plays do not happen often.
+Looking at the 9 histograms we can see that the Turnovers are a rare defensive skill.  This makes sense to anyone who has watched a football game.  Turnover plays do not happen often.
 
 #### 3. Did ISU have better defense against West Virginia or Kansas State?
 ```{r}
@@ -93,7 +93,7 @@ defClean_Tidy_Teams %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`))+
 #defClean %>% select(Name, Opponent_Opponent, Tackles_Solo) %>% spread(Opponent_Opponent, Tackles_Solo) %>% ggplot(aes(x = `West Virginia`, y = `Kansas State`)) + geom_point()
 ```
 
-###### Looking at the newly created data frame and scatterplot, we can see Iowa State had a significanlty better defense game against Kansas State then when playing West Virginia.  
+Looking at the newly created data frame and scatterplot, we can see Iowa State had a significanlty better defense game against Kansas State then when playing West Virginia.  
 
 ## Part Two: Tidying(2)
 #### 1. Separate the Hometown column into two columns, namely the city and the state. Print the first few rows of these two columns. 
@@ -130,7 +130,7 @@ Joined_Offense_with_Biography %>% ggplot(aes(x = Weight, y = Receiving_YDS, colo
 
 ```
 
-###### There does not seem to be a relationship between the weight of a player and the amount of receiving yards.  It is more likely that there is a relationship between the position the player plays and the amount of receiving yards.
+There does not seem to be a relationship between the weight of a player and the amount of receiving yards.  It is more likely that there is a relationship between the position the player plays and the amount of receiving yards.
 
 #### 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
 
