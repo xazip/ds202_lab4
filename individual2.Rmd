@@ -5,9 +5,6 @@ date: "3/26/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 ```{r}
 library(readxl)
 library(dplyr)
@@ -53,7 +50,44 @@ print(str(bioClean))
 defClean <- defClean %>% gather(key=Statistic, value=Count, 3:11)
 defClean
 
-ggplot(defClean, aes(x=Count, fill=Statistic)) + geom_histogram(binwidth=0.5) +
+ggplot(defClean, aes(x=Count, fill=Statistic)) + geom_histogram(binwidth=0.7) +
   facet_wrap(~Statistic)
 
+defClean <- defClean %>%
+  spread(key=Statistic, value=Count)
+
+library(ggplot2)
+
+defClean2 <- defClean %>% gather(key=SoloTackles, value=Count, Tackles_Solo)
+
+WVKS <- defClean2 %>%
+  filter(Opponent_Opponent %in% c('West Virginia', 'Kansas State')) %>%
+  select(Name, Opponent_Opponent, SoloTackles, Count) %>%
+  spread(key=Opponent_Opponent, value=Count)
+
+ggplot(WVKS, aes(x=`West Virginia`, y=`Kansas State`)) + geom_point(na.rm=TRUE) + xlab('West Virgina: Solo Tackles') + ylab('Kansas State: Solo Tackles')
+
+```
+
+```{r}
+#Part two: Tidying(2)
+#1. 
+bioClean
+bio1 <- bioClean %>%
+  separate(Hometown,
+           into=c('City', 'State'),
+           sep=', ', convert = TRUE)
+bioStates<- table(bio1$State)
+print(bioStates)
+```
+
+```{r}
+str(bio1)
+str(offClean)
+bio_offJoin<- inner_join(offClean, bio1, by = "Name")
+playerHome <- bio_offJoin %>% distinct(Name, City, State)
+print(playerHome)
+
+ggplot(bio_offJoin, aes(x= Weight, y= Receiving_YDS, color= Name)) +
+  geom_point(na.rm = TRUE)
 ```
