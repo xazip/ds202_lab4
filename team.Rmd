@@ -134,7 +134,7 @@ Joined_Offense_with_Biography %>% ggplot(aes(x = Weight, y = Receiving_YDS, colo
 
 #### 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
 
-New Question: Is there anything we can conclude from the Height of a player and the positiions of a player on Iowa State Football Team? 
+New Question: Is there anything we can conclude from the Height and Weight of a player to the positiions of a player on Iowa State Football Team? 
 ```{r}
 Joined_Defense_with_Biography <- inner_join(defClean, bioClean_Tidy, by = "Name")
 
@@ -145,4 +145,7 @@ Complete_Join_Biography %>% ggplot(aes(x = Position, y = Height_in_Centimeters, 
   geom_boxplot(na.rm = TRUE)+
   ggtitle("Height Box Plot") + xlab("Position") +ylab("Height in Centimeters") + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
   
+Complete_Join_Biography %>% ggplot(aes(x = Position, y = Weight, fill = Position))+
+  geom_boxplot(na.rm = TRUE)+
+  ggtitle("Weight Box Plot") + xlab("Position") +ylab("Weight in Pounds") + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
