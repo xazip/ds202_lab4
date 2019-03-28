@@ -19,11 +19,11 @@ library(ggplot2)
 library(tidyr)
 library(stringr)
 library(reshape2)
-defense <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Defensive')
+defense <- read_excel('cyclonesFootball2018.xlsx', sheet = 'Defensive')
 
-offense  <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Offensive')
+offense  <- read_excel('cyclonesFootball2018.xlsx', sheet = 'Offensive')
 
-bio <- read_excel('cyclonesFootball2018 .xlsx', sheet = 'Biography')
+bio <- read_excel('cyclonesFootball2018.xlsx', sheet = 'Biography')
 
 
 ```
@@ -134,7 +134,7 @@ Joined_Offense_with_Biography %>% ggplot(aes(x = Weight, y = Receiving_YDS, colo
 
 #### 3. Explore more. Raise a question that can be answered only by looking at two or more data frames. Then answer that question.
 
-New Question: Is there anything we can conclude from the Height and Weight of a player to the positiions of a player on Iowa State Football Team? 
+New Question: Is there anything we can conclude from the Height and Weight of a player to the positions of a player on Iowa State Football Team? 
 ```{r}
 Joined_Defense_with_Biography <- inner_join(defClean, bioClean_Tidy, by = "Name")
 
@@ -149,3 +149,7 @@ Complete_Join_Biography %>% ggplot(aes(x = Position, y = Weight, fill = Position
   geom_boxplot(na.rm = TRUE)+
   ggtitle("Weight Box Plot") + xlab("Position") +ylab("Weight in Pounds") + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
+
+Cornerbacks tend to be smaller players with a smaller stature and lower weight. Deep snappers seems to be taller and normal weight. Defensive backs tend to be smaller players with a lower weight and height. Defensive ends have a higher weight and taller than normal. Defensive line players have a normal height with a higher weight. Line backers seem to have a height around 6'0-6'2" and a weight of 210 to 235 pounds.
+
+Offensive line players seems to be very tall and weigh the most out of all the positions. Place kicker tend to have a low weight with an average height. QB's tend to be weigh less but are taller. Running backs tend to weigh less (but more than the defensive backs) and are shorter than other positions. Tight ends are tall and have a higher weight. Wide receivers tend to weigh less but are very tall.
